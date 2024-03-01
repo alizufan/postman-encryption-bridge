@@ -37,7 +37,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   let hash = '';
   try {
-    hash = privateEncrypt(privateKey.split(String.raw`\n`).join('\n'), Buffer.from(data)).toString("hex")
+    hash = privateEncrypt(privateKey.replace(/\r\n/g, "\n"), Buffer.from(data)).toString("hex")
   } catch (error) {
     return res.status(500).json({
       error,
