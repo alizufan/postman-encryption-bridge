@@ -1,14 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { createPrivateKey, privateEncrypt } from 'crypto'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  function unescape(str) {
+  const crypto = require('crypto');
+  const unescape = (str: string) => {
     return (str + '==='.slice((str.length + 3) % 4))
       .replace(/-/g, '+')
       .replace(/_/g, '/')
   }
   
-  function escape(str) {
+  const escape = (str: string) => {
     return str.replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=/g, '')
@@ -27,6 +27,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   if (Array.isArray(data)) {
     data = data[0]
   }
+  data = decode(data)
 
   if (Array.isArray(privateKey)) {
     privateKey = privateKey[0]
@@ -39,7 +40,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   let hash = '';
   try {
-    hash = privateEncrypt(createPrivateKey(privateKey), Buffer.from(data)).toString("hex")
+    hash = crypto.privateEncrypt(privateKey, Buffer.from(data)).toString("hex")
   } catch (error) {
     return res.status(500).json({
       error,
