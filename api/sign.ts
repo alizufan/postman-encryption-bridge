@@ -32,8 +32,9 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     privateKey = privateKey[0]
   }
 
-  console.log("DATA: ", data, privateKey)
+  console.log("DATA: ", privateKey, data, privateKey)
   privateKey = decode(privateKey)
+  console.log("LENGTH: ", privateKey.length)
 
   let hash = '';
   try {
