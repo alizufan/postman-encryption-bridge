@@ -2,11 +2,11 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { privateEncrypt } from 'crypto'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  const { data = '', privateKey = '' } = req.body
+  const { body } = req
 
-  let resp;
+  let hash = '';
   try {
-    resp = privateEncrypt(privateKey, Buffer.from(data)).toString("hex")
+    hash = privateEncrypt(body.privateKey, Buffer.from(body.data)).toString("hex")
   } catch (error) {
     return res.json({
       error,
@@ -14,6 +14,6 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   }
   
   return res.json({
-    signature: resp,
+    signature: hash,
   })
 }
