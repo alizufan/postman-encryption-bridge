@@ -1,8 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { privateEncrypt } from 'crypto'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  const { name = 'World' } = req.query
+  const { data, privateKey } = req.body
+  
   return res.json({
-    message: `Hello ${name}!`,
+    signature: privateEncrypt(privateKey, Buffer.from(data)).toString("hex"),
   })
 }
