@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { privateEncrypt } from 'crypto'
+import { createPrivateKey, privateEncrypt } from 'crypto'
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   function unescape(str) {
@@ -39,7 +39,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   let hash = '';
   try {
-    hash = privateEncrypt(privateKey.replace(/\r\n/g, "\n"), Buffer.from(data)).toString("hex")
+    hash = privateEncrypt(createPrivateKey(privateKey), Buffer.from(data)).toString("hex")
   } catch (error) {
     return res.status(500).json({
       error,
