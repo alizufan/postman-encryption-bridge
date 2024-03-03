@@ -22,22 +22,21 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     return Buffer.from(unescape(str), 'base64').toString('utf8')
   }
   
-  let { data, privateKey } = req.query
+  let { d, p } = req.query
   
   if (Array.isArray(data)) {
-    data = data[0]
+    d = d[0]
   }
-  data = decode(data)
+  d = decode(d)
 
-  if (Array.isArray(privateKey)) {
-    privateKey = privateKey[0]
+  if (Array.isArray(p)) {
+    p = p[0]
   }
-
-  privateKey = decode(privateKey)
+  p = decode(p)
 
   let hash = '';
   try {
-    hash = crypto.privateEncrypt(privateKey, Buffer.from(data)).toString("hex")
+    hash = crypto.privateEncrypt(p, Buffer.from(d)).toString("hex")
   } catch (error) {
     return res.status(500).json({
       error,
