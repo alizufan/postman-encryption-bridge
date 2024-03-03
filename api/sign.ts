@@ -24,7 +24,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   
   let { d, p } = req.query
   
-  if (Array.isArray(data)) {
+  if (Array.isArray(d)) {
     d = d[0]
   }
   d = decode(d)
@@ -34,9 +34,9 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   }
   p = decode(p)
 
-  let hash = '';
+  let sign = '';
   try {
-    hash = crypto.privateEncrypt(p, Buffer.from(d)).toString("hex")
+    sign = crypto.privateEncrypt(p, Buffer.from(d)).toString("hex")
   } catch (error) {
     return res.status(500).json({
       error,
@@ -44,6 +44,6 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   }
   
   return res.json({
-    signature: hash,
+    sign: sign,
   })
 }
